@@ -1,0 +1,35 @@
+<!doctype html><html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>MilkyWay</title>
+<!-- Start page bundled in the APK. It is only shown when MilkyWay has never been saved on this phone and there is
+     no connection: no error screen, MilkyWay opens by itself as soon as the connection is back. -->
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#030A20;color:#eef4ff;font-family:system-ui,sans-serif;text-align:center;padding:24px;box-sizing:border-box}
+h1{margin:0 0 10px;font-size:1.6rem;color:#d4af37;letter-spacing:.04em}
+p{margin:0;opacity:.72;font-size:.92rem;line-height:1.5}
+.pulse{width:10px;height:10px;margin:18px auto 0;border-radius:50%;background:#d4af37;animation:p 1.6s ease-in-out infinite}
+@keyframes p{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+</style></head>
+<body><main><h1>MilkyWay</h1><p>Inafungua MilkyWay mara mtandao utakapopatikana.<br>Opening MilkyWay as soon as you are connected.</p><div class="pulse" aria-hidden="true"></div></main>
+<script>
+(() => {
+  const app = 'https://masiyatunda.com/milkyway/';
+  const given = "__MW_TARGET__";
+  const target = /^https:\/\/([a-z0-9-]+\.)*masiyatunda\.com\//i.test(given) ? given : app;
+  let delay = 3000, timer = null, trying = false;
+  // A tiny request proves the connection works before opening, so the app never flips back and forth.
+  async function attempt() {
+    if (trying) return;
+    trying = true;
+    try {
+      await fetch(app + 'manifest.json?mw-probe=' + Date.now(), { mode: 'no-cors', cache: 'no-store' });
+      location.replace(target);
+      return;
+    } catch {} finally { trying = false; }
+    clearTimeout(timer);
+    timer = setTimeout(attempt, delay);
+    delay = Math.min(delay * 2, 30000);
+  }
+  window.addEventListener('online', () => { delay = 3000; attempt(); });
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') attempt(); });
+  attempt();
+})();
+</script></body></html>

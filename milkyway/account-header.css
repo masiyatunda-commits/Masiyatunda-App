@@ -1,0 +1,28 @@
+/* My Account header: galaxy cover banner with the member's profile photo, quick actions and follower stats. */
+#authModal .sheet.mw-account-mode .mw-auth-logo,
+#authModal .sheet.mw-account-mode>p.muted,
+#authModal .sheet.mw-account-mode>label,
+#authModal .sheet.mw-account-mode>.row,
+#authModal .sheet.mw-account-mode>.msg:empty{display:none!important}
+#authModal .sheet.mw-account-mode{padding-top:14px!important}
+#authModal .sheet.mw-account-mode>.close{width:36px;height:36px;min-height:36px;border-radius:50%;display:grid;place-items:center;background:var(--card)!important;border:1px solid var(--line)!important;color:var(--text)!important;font-size:1.25rem;line-height:1}
+#authModal .sheet.mw-account-mode>h2{margin:4px 0 12px!important;font-size:1.3rem!important;letter-spacing:-.01em}
+#authModal .sheet.mw-account-mode #loggedBox{margin-top:0!important}
+
+#loggedBox .profile-card.mw-account-hero{position:relative;overflow:hidden;display:grid;justify-items:center;align-items:start;min-height:0;padding:0 0 16px;border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--mw-glass-line,var(--line));box-shadow:inset 0 1px rgba(255,255,255,.06),0 14px 34px rgba(3,8,24,.28)}
+#loggedBox .mw-account-hero::before,#loggedBox .mw-account-hero::after{content:none!important}
+#loggedBox .mw-account-cover{grid-area:1/1;width:100%;height:112px;background:url('profile-galaxy-watermark.svg') center/cover no-repeat,radial-gradient(120% 140% at 50% 45%,#0d1d3a 0%,#071228 58%,#040a1a 100%);-webkit-mask:linear-gradient(180deg,#000 62%,transparent);mask:linear-gradient(180deg,#000 62%,transparent)}
+#loggedBox .mw-account-hero .mwx-card-tools{grid-area:1/1;align-self:start;justify-self:stretch;z-index:1;justify-content:flex-end;margin:0;padding:10px 10px 0}
+#loggedBox .mw-account-hero .mwx-card-tools h3{display:none}
+#loggedBox .mw-account-hero .mwx-icon-button{min-width:36px;height:36px;min-height:36px!important;border-radius:50%!important;background:rgba(5,12,30,.45)!important;border-color:rgba(255,255,255,.16)!important;color:#fff!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#loggedBox .mw-account-hero .mwx-icon-button.mwx-admin{border-radius:999px!important;padding:0 12px!important;background:var(--mw-accent)!important;color:var(--mw-accent-ink)!important}
+#loggedBox .mw-account-avatar{grid-area:1/1;z-index:1;margin-top:58px;width:96px;height:96px;border-radius:50%;display:grid;place-items:center;font-size:2.2rem;font-weight:800;color:var(--mw-accent-ink,#1a1400);background:var(--mw-gradient,var(--mw-accent,#FACC15));border:3px solid var(--panel,#0F172A);box-shadow:0 0 0 2px var(--mw-accent,#FACC15),0 10px 30px var(--mw-accent-soft,rgba(250,204,21,.3))}
+#loggedBox .mw-account-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+#loggedBox .mw-account-avatar.mw-avatar-button::after{right:-2px;bottom:2px;width:28px;height:28px;font-size:1rem;font-weight:800;background:var(--mw-accent,#FACC15);color:var(--mw-accent-ink,#1a1400);border:3px solid var(--panel,#0F172A)}
+#loggedBox .mw-account-avatar:focus-visible{outline:2px solid var(--mw-accent,#FACC15);outline-offset:4px}
+#loggedBox .mw-account-hero .stats{grid-area:2/1;display:grid;grid-template-columns:1fr 1fr;width:min(280px,82%);margin:14px 0 0;gap:0;padding:0;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:.72rem;color:var(--muted)}
+#loggedBox .mw-account-hero .stats span{display:grid;justify-items:center;gap:1px;padding:9px 6px;border:0;border-radius:0;background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;text-transform:capitalize}
+#loggedBox .mw-account-hero .stats span+span{border-inline-start:1px solid var(--line)}
+#loggedBox .mw-account-hero .stats b{font-size:1.15rem;line-height:1.2;color:var(--text)}
+
+:is([data-mw-appearance="light"],[data-mw-appearance="sunlight"]) #loggedBox .mw-account-avatar{border-color:#fff}

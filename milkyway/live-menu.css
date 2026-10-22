@@ -1,0 +1,6 @@
+
+.mw-notification-preference{ display: flex; align-items: center; gap: 12px; min-height: 48px; font-size: 14px; }
+.mw-notification-preference input{ width: 20px; height: 20px; margin: 0; flex: 0 0 20px; }
+#notifications .notification{ width: 100%; text-align: start; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--text); background: var(--card); min-height: 48px; }
+#notifications .notification small{ flex-basis: 100%; }
+.mw-alert-avatar{ width: 32px; height: 32px; object-fit: cover; border-radius: 50%; }

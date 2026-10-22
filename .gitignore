@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.*
+
+# Local Netlify folder
+.netlify
+dist/
+build/
+coverage/
+android/.gradle/
+android/**/build/
+android/local.properties
+.wrangler/

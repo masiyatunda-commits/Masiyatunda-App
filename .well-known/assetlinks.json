@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.masiyatunda.milkyway",
+      "sha256_cert_fingerprints": [
+        "75:15:F2:75:65:E2:FE:88:D2:A9:8C:12:FC:73:CA:73:7E:39:94:37:73:2D:D9:C9:DB:21:EC:BE:EF:14:C8:3C"
+      ]
+    }
+  }
+]

@@ -1,0 +1,28 @@
+MILKWY V30.1 — VIDEO LIVE (LiveKit Cloud)
+
+KILICHOONGEZWA
+- Menyu ya Anza Live sasa ina chaguo la Audio Live na Video Live.
+- Video Live UI ya host/viewer, camera/microphone controls, room ID na ujumbe wa hitilafu.
+- LiveKit SDK upande wa browser na mfano wa Supabase Edge Function kwa kutoa token bila kufichua API secret.
+
+MUHIMU: HAIJAUNGANISHWA KAMILI HADI UWEKE HUDUMA ZA CLOUD
+Faili ya HTML ina MW_VIDEO_LIVE_TOKEN_ENDPOINT tupu kwa makusudi. Lazima ibadilishwe iwe URL ya Edge Function baada ya kui-deploy. Hatuwezi kufanya live halisi hadi LiveKit Cloud na Supabase Function ziwe zimesanidiwa.
+
+HATUA ZA MWENYE APP
+1. Fungua https://cloud.livekit.io/ na tengeneza project ya LiveKit. Nakili server URL, API Key na API Secret.
+2. Katika Supabase project ya app, deploy folder supabase/functions/mw-livekit-token kama Edge Function. Hakikisha project yako inatumia Supabase CLI/Edge Functions.
+3. Weka function secrets (usiweke kwenye index.html):
+   LIVEKIT_URL=https://... (server URL ya LiveKit)
+   LIVEKIT_API_KEY=...
+   LIVEKIT_API_SECRET=...
+   Supabase yenyewe hutoa SUPABASE_URL na SUPABASE_ANON_KEY kwa function.
+4. Kwenye milkyway/index.html tafuta:
+   const MW_VIDEO_LIVE_TOKEN_ENDPOINT = '';
+   badilisha '' iwe URL halisi ya function, mfano https://PROJECT_REF.supabase.co/functions/v1/mw-livekit-token
+5. Deploy app kwa HTTPS na ujaribu kwa akaunti mbili kwenye vifaa/browser tofauti.
+
+MIPAKA YA TOLEO HILI
+- Token endpoint ya mfano inathibitisha mtumiaji aliyeingia na inazuia publish kwa viewer, lakini bado inahitaji room ownership, audience-scope/follower enforcement, rate limits na room persistence kabla ya kutangazwa kwa umma.
+- Room ID ya host hutengenezwa na browser; mfumo wa production unapaswa kuunda room/metadata kupitia backend yenye uthibitishaji.
+- Hakuna API secret inayopaswa kuwekwa ndani ya HTML, Git repository ya umma, au kutumwa kwenye chat.
+- Audio Live ya awali imeachwa kama ilivyokuwa; Video Live ni sehemu mpya inayotegemea LiveKit.

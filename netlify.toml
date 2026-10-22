@@ -1,0 +1,119 @@
+[build]
+  functions = "functions"
+  publish = "."
+
+[images]
+  remote_images = ['https://wpclkhgizbvxuvbhbwzs\.supabase\.co/storage/v1/object/public/portfolio/.*']
+
+[[headers]]
+  for = "/milkyway/manifest.json"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/milkyway/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[build.environment]
+  LIVEKIT_URL = "wss://masiyatunda-milkyway-live-mgh6b1np.livekit.cloud"
+
+# Android app download: served as an installable package, always fresh.
+[[headers]]
+  for = "/milkyway/download/*.apk"
+  [headers.values]
+    Content-Type = "application/vnd.android.package-archive"
+    Content-Disposition = "attachment; filename=\"MilkyWay.apk\""
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/.well-known/assetlinks.json"
+  [headers.values]
+    Content-Type = "application/json"
+    Access-Control-Allow-Origin = "*"
+
+# The Android build folder holds the private signing key; never serve it.
+[[redirects]]
+  from = "/android/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+# "My Account" and the customer portal were removed; Admin manages everything centrally.
+[[redirects]]
+  from = "/account.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/account"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/portal.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/portal"
+  to = "/"
+  status = 301
+  force = true
+
+# Pictures keep their names between releases; browsers reuse them for a week and refresh quietly after that.
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/slides/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/milkyway/backgrounds/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/milkyway/brand/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/brand/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=604800"
+
+# Service workers must always be checked for updates.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/sw-cache.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# The MilkyWay page and gift files must always be checked for a newer deploy (phones and the Android app included).
+[[headers]]
+  for = "/milkyway/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/milkyway/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/milkyway/gift*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

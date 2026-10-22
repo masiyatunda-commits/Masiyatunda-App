@@ -1,0 +1,19 @@
+MILKYWAY VIDEO LIVE — LIVEKIT CONNECTION
+
+Frontend endpoint is already set in milkyway/index.html:
+https://wpclkhgizbvxuvbhbwzs.supabase.co/functions/v1/livekit-token
+
+IMPORTANT: HTML must contain only the public Supabase Edge Function URL. Never put the LiveKit token, LIVEKIT_API_KEY, or LIVEKIT_API_SECRET in HTML or JavaScript.
+
+This package includes the function under supabase/functions/livekit-token/index.ts so the deployed function name matches the URL above.
+
+Before live testing:
+1. In Supabase project wpclkhgizbvxuvbhbwzs, deploy supabase/functions/livekit-token.
+2. In Supabase Edge Function secrets, set LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET. Use values from the correct LiveKit Cloud project. Do not share the secret.
+3. Make sure Supabase Auth users are logged in; the frontend sends their session access token to the function.
+4. Function endpoint must allow the browser request from https://masiyatunda.com and its MilkyWay path; CORS headers are included.
+5. Test with two separate signed-in accounts/devices. Host starts live, second account joins the live listing/room.
+
+If Supabase currently has a function named livekit-token, redeploy this code to that same function name. If it has only mw-livekit-token, the URL and function name do not match; deploy under livekit-token or change the frontend endpoint to match.
+
+This does not prove live media works until deployed with valid secrets and tested on two devices. Do not disable authentication or expose secrets to fix 401 errors.

@@ -1,0 +1,1 @@
+ALTER TABLE "mw_conversation_rooms" ADD COLUMN "ended_at" timestamp with time zone;
