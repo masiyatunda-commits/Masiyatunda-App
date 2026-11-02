@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live - TikTok Style</title>
+    <style>
+      :root {
+        --bg: #000000;
+        --panel: rgba(18, 18, 18, 0.72);
+        --panel-strong: rgba(27, 27, 27, 0.92);
+        --muted: rgba(255, 255, 255, 0.7);
+        --white: #ffffff;
+        --pink: #ff2d55;
+        --gray: #b8b8b8;
+        --shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        color: var(--white);
+        font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        overflow: hidden;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .live-shell {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background: #000;
+        overflow: hidden;
+      }
+
+      .video-stage {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, #111 0%, #000 60%);
+      }
+
+      video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background: #000;
+        transform: scaleX(1);
+      }
+
+      video.flip {
+        transform: scaleX(-1);
+      }
+
+      .dark-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.24), rgba(0,0,0,0.18) 30%, rgba(0,0,0,0.42));
+        pointer-events: none;
+      }
+
+      .topbar {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        right: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 4;
+      }
+
+      .user-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ff8a2f, #ff2d55, #a855f7);
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: 18px;
+        box-shadow: var(--shadow);
+      }
+
+      .name-box {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .name-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .name {
+        font-weight: 700;
+        font-size: 15px;
+      }
+
+      .verified {
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        background: #1da1f2;
+        display: grid;
+        place-items: center;
+        font-size: 11px;
+      }
+
+      .viewers-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(4px);
+        font-size: 12px;
+        color: rgba(255,255,255,0.9);
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ff2d55;
+        box-shadow: 0 0 0 5px rgba(255, 45, 85, 0.18);
+      }
+
+      .lock-btn {
+        width: 42px;
+        height: 42px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.38);
+        color: var(--white);
+        font-size: 22px;
+        cursor: pointer;
+        box-shadow: var(--shadow);
+      }
+
+      .side-controls {
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 4;
+      }
+
+      .control-btn {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(18,18,18,0.5);
+        color: var(--white);
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(5px);
+        transition: transform 0.15s ease, background 0.2s ease;
+      }
+
+      .control-btn:active { transform: scale(0.96); }
+
+      .control-btn.inactive {
+        background: rgba(255,255,255,0.08);
+      }
+
+      .control-btn.mic-off {
+        background: rgba(255, 50, 84, 0.22);
+      }
+
+      .bottom-bar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 20px;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 0 18px;
+        z-index: 4;
+      }
+
+      .title-box {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .input-wrap {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 18px;
+        height: 54px;
+        border-radius: 18px;
+        background: rgba(0,0,0,0.34);
+        border: 1px solid rgba(255,255,255,0.12);
+        backdrop-filter: blur(6px);
+      }
+
+      .input-wrap input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: var(--white);
+        font-size: 15px;
+      }
+
+      .input-wrap input::placeholder {
+        color: rgba(255,255,255,0.7);
+      }
+
+      .action-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .secondary-btn,
+      .primary-btn {
+        border: none;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.15s ease, opacity 0.2s ease;
+      }
+
+      .secondary-btn:active,
+      .primary-btn:active { transform: scale(0.96); }
+
+      .secondary-btn {
+        height: 48px;
+        min-width: 110px;
+        border-radius: 16px;
+        padding: 0 18px;
+        background: rgba(255,255,255,0.12);
+        color: var(--white);
+      }
+
+      .primary-btn {
+        height: 52px;
+        min-width: 150px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #ff2d55, #ff4d77);
+        color: var(--white);
+        box-shadow: 0 15px 25px rgba(255, 45, 85, 0.28);
+      }
+
+      .primary-btn.live {
+        background: linear-gradient(135deg, #ff2d55, #d2142d);
+      }
+
+      .status-pill {
+        position: absolute;
+        left: 18px;
+        bottom: 95px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 45, 85, 0.18);
+        border: 1px solid rgba(255, 45, 85, 0.35);
+        color: #ffdce4;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        z-index: 4;
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+
+      .status-pill.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .status-pill .dot {
+        width: 7px;
+        height: 7px;
+        box-shadow: none;
+      }
+
+      @media (max-width: 700px) {
+        .bottom-bar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .title-box {
+          width: 100%;
+        }
+
+        .action-group {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .secondary-btn,
+        .primary-btn {
+          flex: 1;
+          min-width: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="live-shell">
+      <div class="video-stage">
+        <video id="previewVideo" autoplay muted playsinline></video>
+      </div>
+      <div class="dark-overlay"></div>
+
+      <div class="status-pill" id="liveStatus">
+        <span class="dot"></span>
+        LIVE
+      </div>
+
+      <header class="topbar">
+        <div class="user-meta">
+          <div class="avatar">M</div>
+          <div class="name-box">
+            <div class="name-row">
+              <span class="name">masiyatunda</span>
+              <span class="verified">✓</span>
+            </div>
+            <div class="viewers-pill">
+              <span class="dot"></span>
+              <span id="viewerCount">12.4K</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="lock-btn" type="button" aria-label="Lock">🔒</button>
+      </header>
+
+      <aside class="side-controls" aria-label="Live settings">
+        <button class="control-btn" id="micToggle" type="button" aria-label="Toggle microphone">🎙️</button>
+        <button class="control-btn" id="flipCamera" type="button" aria-label="Flip camera">🔄</button>
+      </aside>
+
+      <div class="bottom-bar">
+        <div class="title-box">
+          <div class="input-wrap">
+            <input id="streamTitle" type="text" value="Live from my room" placeholder="What are you thinking?" />
+          </div>
+        </div>
+
+        <div class="action-group">
+          <button class="secondary-btn" id="previewBtn" type="button">Preview</button>
+          <button class="primary-btn" id="startBtn" type="button">Start Live</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const video = document.getElementById('previewVideo');
+      const startBtn = document.getElementById('startBtn');
+      const previewBtn = document.getElementById('previewBtn');
+      const micToggle = document.getElementById('micToggle');
+      const flipCamera = document.getElementById('flipCamera');
+      const liveStatus = document.getElementById('liveStatus');
+      const viewerCount = document.getElementById('viewerCount');
+      const streamTitle = document.getElementById('streamTitle');
+
+      const state = {
+        stream: null,
+        live: false,
+        micOn: true,
+        facingMode: 'user'
+      };
+
+      function setViewerText(value) {
+        viewerCount.textContent = value;
+      }
+
+      function updateMicButton() {
+        micToggle.textContent = state.micOn ? '🎙️' : '🔇';
+        micToggle.classList.toggle('mic-off', !state.micOn);
+      }
+
+      function updateLiveButton() {
+        startBtn.textContent = state.live ? 'End Live' : 'Start Live';
+        startBtn.classList.toggle('live', state.live);
+        liveStatus.classList.toggle('visible', state.live);
+      }
+
+      async function requestCamera() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          alert('Your browser does not support camera access.');
+          return null;
+        }
+
+        try {
+          const constraints = {
+            video: {
+              facingMode: state.facingMode,
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            },
+            audio: true
+          };
+
+          const stream = await navigator.mediaDevices.getUserMedia(constraints);
+          state.stream = stream;
+          video.srcObject = stream;
+          video.classList.toggle('flip', state.facingMode === 'user');
+
+          const audioTracks = stream.getAudioTracks();
+          audioTracks.forEach((track) => {
+            track.enabled = state.micOn;
+          });
+
+          return stream;
+        } catch (error) {
+          console.error('Camera access error:', error);
+          alert('Unable to access the camera or microphone. Please allow permission and try again.');
+          return null;
+        }
+      }
+
+      async function previewStream() {
+        if (!state.stream) {
+          await requestCamera();
+        }
+
+        if (state.stream) {
+          video.play();
+        }
+      }
+
+      async function startLiveSession() {
+        if (!state.stream) {
+          await requestCamera();
+        }
+
+        if (!state.stream) return;
+
+        state.live = true;
+        updateLiveButton();
+        setViewerText('12.4K');
+
+        const title = streamTitle.value.trim();
+        if (title) {
+          document.title = `${title} - TikTok Live`;
+        }
+      }
+
+      function endLiveSession() {
+        state.live = false;
+        updateLiveButton();
+        setViewerText('0');
+      }
+
+      function toggleMic() {
+        if (!state.stream) {
+          state.micOn = !state.micOn;
+          updateMicButton();
+          return;
+        }
+
+        const audioTracks = state.stream.getAudioTracks();
+        audioTracks.forEach((track) => {
+          track.enabled = !track.enabled;
+        });
+
+        state.micOn = !state.micOn;
+        updateMicButton();
+      }
+
+      async function flipVideo() {
+        state.facingMode = state.facingMode === 'user' ? 'environment' : 'user';
+
+        if (state.stream) {
+          const oldStream = state.stream;
+          oldStream.getTracks().forEach((track) => track.stop());
+          state.stream = null;
+        }
+
+        await requestCamera();
+      }
+
+      startBtn.addEventListener('click', () => {
+        if (state.live) {
+          endLiveSession();
+          return;
+        }
+
+        startLiveSession();
+      });
+
+      previewBtn.addEventListener('click', async () => {
+        await previewStream();
+      });
+
+      micToggle.addEventListener('click', toggleMic);
+      flipCamera.addEventListener('click', flipVideo);
+
+      updateMicButton();
+      updateLiveButton();
+      previewStream();
+    </script>
+  </body>
+</html>
